@@ -20,8 +20,7 @@ jobs:
           path: |
             deps
             _build
-            assets/node_modules
-          key: elixir-deps-${{ runner.os }}-${{ hashFiles('mix.lock') }}-${{ hashFiles('.tool-versions') }}-${{ hashFiles('assets/pnpm-lock.yaml') }}-${{ hashFiles('lib/**/*.ex', 'lib/**/*.*ex', 'config/*.exs', 'mix.exs') }}
+          key: elixir-deps-${{ runner.os }}-${{ hashFiles('mix.lock') }}-${{ hashFiles('.tool-versions') }}-${{ hashFiles('lib/**/*.ex', 'lib/**/*.*ex', 'config/*.exs', 'mix.exs') }}
           restore-keys: |
             elixir-deps-${{ runner.os }}-${{ hashFiles('mix.lock') }}-
             elixir-deps-${{ runner.os }}
