@@ -101,8 +101,7 @@ defmodule Knigge.Verification.Context do
       {:error, {:already_loaded, ^app}} ->
         :ok
 
-      {:error, {reason, _}}
-      when reason in ["no such file or directory", ~c"no such file or directory"] ->
+      {:error, {~c"no such file or directory", _}} ->
         {:error, {:unknown_app, app}}
 
       {:error, :undefined} ->
