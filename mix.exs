@@ -1,20 +1,14 @@
 defmodule Knigge.MixProject do
   use Mix.Project
 
-  @repo "https://github.com/alexocode/knigge"
+  @repo "https://github.com/fschoenfeldt/knigge"
 
   def project do
     [
-      app: :knigge,
+      app: :ex_knigge,
       config_path: "config/config.exs",
-      elixir: ">= 1.7.4 and < 2.0.0",
+      elixir: ">= 1.18.0 and < 2.0.0",
       elixirc_paths: elixirc_paths(Mix.env()),
-      preferred_cli_env: [
-        coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.post": :test,
-        "coveralls.html": :test
-      ],
       test_coverage: [tool: ExCoveralls],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -24,7 +18,7 @@ defmodule Knigge.MixProject do
       dialyzer: dialyzer(),
 
       # Docs
-      name: "Knigge",
+      name: "ExKnigge",
       source_url: @repo,
       homepage_url: @repo,
 
@@ -33,6 +27,26 @@ defmodule Knigge.MixProject do
       docs: docs(),
       package: package(),
       version: version()
+    ]
+  end
+
+  def cli do
+    [
+      # https://github.com/lpil/mix-test.watch?tab=readme-ov-file#usage
+      # https://hexdocs.pm/ex_check/readme.html#duplicate-builds
+      preferred_envs: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.github": :test,
+        check: :test,
+        credo: :test,
+        dialyzer: :test,
+        docs: :test,
+        format: :test,
+        "test.watch": :test
+      ]
     ]
   end
 
@@ -49,35 +63,32 @@ defmodule Knigge.MixProject do
   # Aliases are shortcuts or tasks specific to the current project.
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
-    [
-      "check.all": ["format --check-formatted", "credo", "dialyzer"]
-    ]
+    []
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:bunt, "~> 0.2", runtime: false},
+      {:bunt, "~> 1.0", runtime: false},
 
       # No Runtime
-      {:credo, ">= 1.0.0", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.23", only: :dev, runtime: false},
+      {:ex_check, "~> 0.16.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false},
 
       # Test
       {:excoveralls, "~> 0.13", only: :test},
-      {:mox, "~> 0.5", only: :test},
-
-      # Docs
-      {:inch_ex, ">= 0.0.0", only: :docs}
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 
   defp dialyzer do
     [
-      ignore_warnings: ".dialyzer_ignore.exs",
-      plt_add_apps: [:bunt],
-      plt_file: {:no_warn, ".dialyzer/dialyzer.plt"}
+      plt_add_deps: :app_tree,
+      plt_add_apps: [:mix, :logger, :bunt],
+      plt_core_path: "_build/plt_core",
+      plt_file: {:no_warn, "_build/plts/dialyzer.plt"}
     ]
   end
 
@@ -120,7 +131,10 @@ defmodule Knigge.MixProject do
       links: %{
         "GitHub" => @repo
       },
-      maintainers: ["Alex Wolf <craft@alexocode.dev>"]
+      maintainers: [
+        "Alex Wolf <craft@alexocode.dev>",
+        "Frederik Schönfeldt <frederikschoenfeldt@gmail.com>"
+      ]
     ]
   end
 

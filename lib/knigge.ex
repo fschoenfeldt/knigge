@@ -32,7 +32,7 @@ defmodule Knigge do
 
       def deps do
         [
-          {:knigge, "~> 1.4"}
+          {:ex_knigge, "~> 1.4"}
         ]
       end
 

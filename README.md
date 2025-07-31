@@ -1,4 +1,5 @@
 # Knigge
+
 [![CI](https://github.com/alexocode/knigge/workflows/CI/badge.svg)](https://github.com/alexocode/knigge/actions?query=branch%3Amain+workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/alexocode/knigge/badge.svg?branch=main)](https://coveralls.io/github/alexocode/knigge?branch=main)
 [![Hexdocs.pm](https://img.shields.io/badge/hexdocs-online-blue)](https://hexdocs.pm/knigge/)
@@ -43,7 +44,7 @@ Simply add `knigge` to your list of dependencies in your `mix.exs`:
 ```elixir
 def deps do
   [
-    {:knigge, "~> 1.4"}
+    {:ex_knigge, "~> 1.4"}
   ]
 end
 ```

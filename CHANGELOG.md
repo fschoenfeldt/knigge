@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING**: Changed package name from `knigge` to `ex_knigge` to distinguish from original package
+- **BREAKING**: Minimum Elixir version raised from `>= 1.7.4` to `>= 1.18.0`
+- Updated Elixir from 1.12.2 to 1.18.4-otp-27
+- Updated Erlang/OTP from 23.3.4.5 to 27.3.4.1
+- Migrated from custom CI configuration to streamlined `ex_check` workflow
+- Updated all configuration files from deprecated `use Mix.Config` to modern `import Config`
+- Changed `Mix.env()` to `config_env()` in config files for better compatibility
+- Updated dependencies:
+  - `bunt` from `~> 0.2` to `~> 1.0`
+  - `credo` from `>= 1.0.0` to `~> 1.7`
+  - `dialyxir` from `~> 1.0` to `~> 1.4`
+  - `ex_doc` from `~> 0.23` to `>= 0.0.0`
+  - `mox` from `~> 0.5` to `~> 1.0`
+- Removed `inch_ex` dependency (docs-only)
+- Added Frederik Schönfeldt as maintainer
+
+### Added
+
+- Added GitHub Dependabot configuration for automatic dependency updates
+- Added comprehensive CLI environment configuration for better test tooling integration
+
+### Quality
+
+- Applied `mix format` for consistent code style throughout the project
+- Added `ex_check` dependency for unified code quality checks with custom `.check.exs` configuration
+- Added coveralls integration to ex_check workflow
+- Simplified dialyzer configuration with improved PLT handling
+
+### Infrastructure
+
+- Simplified CI workflow from complex matrix builds to single `mix check` job
+- Updated GitHub Actions versions (checkout@v4, cache@v4, asdf-vm/actions/install@v4)
+- Modernized caching strategy for better build performance
+- Added automated dependency management via Dependabot
+
 ## [1.4.1] - 2021-10-03
 
 ### Changed
@@ -34,7 +71,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#16](https://github.com/alexocode/knigge/pull/16): Migrate CI from CircleCI to GitHub actions ([@alexocode])
 
-
 ## [1.2.0] - 2020-09-07
 
 ### Changed
@@ -61,7 +97,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.2.0]: https://github.com/alexocode/knigge/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/alexocode/knigge/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/alexocode/knigge/compare/v1.0.4...v1.1.0
-
 [@alexcastano]: https://github.com/alexcastano
 [@NickNeck]: https://github.com/NickNeck
 [@polvalente]: https://github.com/polvalente

@@ -54,9 +54,7 @@ defmodule Knigge.Options do
   - `[only: <envs>]` - equivalent to the option above
   - `[except: <envs>]` - only delegates at runtime if the current environment is __not__ contained in the list
 
-  __Default__: `Application.get_env(:knigge, :delegate_at_runtime?, #{
-    inspect(@defaults[:delegate_at_runtime?])
-  })`
+  __Default__: `Application.get_env(:ex_knigge, :delegate_at_runtime?, #{inspect(@defaults[:delegate_at_runtime?])})`
 
   ### `do_not_delegate`
   A keyword list defining callbacks for which no delegation should happen.
@@ -72,7 +70,7 @@ defmodule Knigge.Options do
   - `[only: <envs>]` - equivalent to the option above
   - `[except: <envs>]` - only warns if the current environment is __not__ contained in the list
 
-  __Default__: `Application.get_env(:knigge, :warn, #{inspect(@defaults[:warn])})`
+  __Default__: `Application.get_env(:ex_knigge, :warn, #{inspect(@defaults[:warn])})`
   """
 
   import Keyword, only: [has_key?: 2, keyword?: 1]
@@ -156,9 +154,7 @@ defmodule Knigge.Options do
 
         message when is_binary(message) ->
           IO.warn(
-            "Knigge encountered the deprecated option `#{key}`, this option is no longer supported; #{
-              message
-            }."
+            "Knigge encountered the deprecated option `#{key}`, this option is no longer supported; #{message}."
           )
 
           nil
@@ -178,13 +174,7 @@ defmodule Knigge.Options do
 
   @doc """
   Applies the defaults to the given options:
-  #{
-    @defaults
-    |> Enum.map(fn {key, value} ->
-      "  - #{key} = #{inspect(value)}"
-    end)
-    |> Enum.join("\n")
-  }
+  #{@defaults |> Enum.map(fn {key, value} -> "  - #{key} = #{inspect(value)}" end) |> Enum.join("\n")}
   """
   @spec with_defaults(raw()) :: raw()
   def with_defaults(opts) do
@@ -197,7 +187,7 @@ defmodule Knigge.Options do
   end
 
   defp defaults_from_config do
-    :knigge
+    :ex_knigge
     |> Application.get_all_env()
     |> Keyword.take([:delegate_at_runtime?, :warn])
   end
@@ -235,19 +225,19 @@ defmodule Knigge.Options do
       iex> Knigge.Options.validate!(implementation: SomeModule)
       [implementation: SomeModule]
 
-      iex> Knigge.Options.validate!(otp_app: :knigge)
-      [otp_app: :knigge]
+      iex> Knigge.Options.validate!(otp_app: :ex_knigge)
+      [otp_app: :ex_knigge]
 
-      iex> Knigge.Options.validate!(implementation: SomeModule, otp_app: :knigge)
+      iex> Knigge.Options.validate!(implementation: SomeModule, otp_app: :ex_knigge)
       ** (ArgumentError) Knigge expects either the :implementation or the :otp_app option but both were given.
 
-      iex> Knigge.Options.validate!(otp_app: :knigge, the_answer_to_everything: 42, another_weird_option: 1337)
+      iex> Knigge.Options.validate!(otp_app: :ex_knigge, the_answer_to_everything: 42, another_weird_option: 1337)
       ** (ArgumentError) Knigge received unexpected options: [the_answer_to_everything: 42, another_weird_option: 1337]
 
       iex> Knigge.Options.validate!(otp_app: "knigge")
       ** (ArgumentError) Knigge received invalid value for `otp_app`. Expected atom but received: "knigge"
 
-      iex> Knigge.Options.validate!(otp_app: :knigge, delegate_at_runtime?: "test")
+      iex> Knigge.Options.validate!(otp_app: :ex_knigge, delegate_at_runtime?: "test")
       ** (ArgumentError) Knigge received invalid value for `delegate_at_runtime?`. Expected boolean or environment (atom or list of atoms) but received: "test"
   """
   @spec validate!(opts :: raw()) :: no_return | opts when opts: raw()
@@ -261,7 +251,7 @@ defmodule Knigge.Options do
   end
 
   defp validate_keyword!(opts) do
-    unless keyword?(opts) do
+    if !keyword?(opts) do
       raise ArgumentError,
             "Knigge expects a keyword list as options, instead received: #{inspect(opts)}"
     end

@@ -62,18 +62,18 @@ defmodule Knigge.Verification.Context do
 
   ## Example
 
-      iex> {:ok, context} = #{module}.for_app(:knigge)
+      iex> {:ok, context} = #{module}.for_app(:ex_knigge)
       iex> context.app
-      :knigge
+      :ex_knigge
       iex> context.modules
       []
 
       iex> context = %#{module}{began_at: 123}
-      iex> {:ok, context} = #{module}.for_app(context, :knigge)
+      iex> {:ok, context} = #{module}.for_app(context, :ex_knigge)
       iex> context.began_at
       123
       iex> context.app
-      :knigge
+      :ex_knigge
       iex> context.modules
       []
 
@@ -95,11 +95,20 @@ defmodule Knigge.Verification.Context do
 
   defp ensure_loaded(app) do
     case Application.load(app) do
-      :ok -> :ok
-      {:error, {:already_loaded, ^app}} -> :ok
-      {:error, {'no such file or directory', _}} -> {:error, {:unknown_app, app}}
-      {:error, :undefined} -> {:error, {:unknown_app, app}}
-      other -> other
+      :ok ->
+        :ok
+
+      {:error, {:already_loaded, ^app}} ->
+        :ok
+
+      {:error, {~c"no such file or directory", _}} ->
+        {:error, {:unknown_app, app}}
+
+      {:error, :undefined} ->
+        {:error, {:unknown_app, app}}
+
+      other ->
+        other
     end
   end
 
