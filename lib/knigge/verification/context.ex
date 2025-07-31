@@ -95,11 +95,21 @@ defmodule Knigge.Verification.Context do
 
   defp ensure_loaded(app) do
     case Application.load(app) do
-      :ok -> :ok
-      {:error, {:already_loaded, ^app}} -> :ok
-      {:error, {'no such file or directory', _}} -> {:error, {:unknown_app, app}}
-      {:error, :undefined} -> {:error, {:unknown_app, app}}
-      other -> other
+      :ok ->
+        :ok
+
+      {:error, {:already_loaded, ^app}} ->
+        :ok
+
+      {:error, {reason, _}}
+      when reason in ["no such file or directory", ~c"no such file or directory"] ->
+        {:error, {:unknown_app, app}}
+
+      {:error, :undefined} ->
+        {:error, {:unknown_app, app}}
+
+      other ->
+        other
     end
   end
 

@@ -13,7 +13,8 @@ defmodule Knigge.MixProject do
         coveralls: :test,
         "coveralls.detail": :test,
         "coveralls.post": :test,
-        "coveralls.html": :test
+        "coveralls.html": :test,
+        "check.all": :test
       ],
       test_coverage: [tool: ExCoveralls],
       start_permanent: Mix.env() == :prod,
@@ -50,34 +51,32 @@ defmodule Knigge.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      "check.all": ["format --check-formatted", "credo", "dialyzer"]
+      "check.all": ["format --check-formatted", "credo", "dialyzer", "test"]
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:bunt, "~> 0.2", runtime: false},
+      {:bunt, "~> 1.0", runtime: false},
 
       # No Runtime
-      {:credo, ">= 1.0.0", only: :dev, runtime: false},
-      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.23", only: :dev, runtime: false},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
 
       # Test
       {:excoveralls, "~> 0.13", only: :test},
-      {:mox, "~> 0.5", only: :test},
-
-      # Docs
-      {:inch_ex, ">= 0.0.0", only: :docs}
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 
   defp dialyzer do
     [
-      ignore_warnings: ".dialyzer_ignore.exs",
-      plt_add_apps: [:bunt],
-      plt_file: {:no_warn, ".dialyzer/dialyzer.plt"}
+      plt_add_deps: :app_tree,
+      plt_add_apps: [:mix, :logger, :bunt],
+      plt_core_path: "_build/plt_core",
+      plt_file: {:no_warn, "_build/plts/dialyzer.plt"}
     ]
   end
 

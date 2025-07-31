@@ -4,7 +4,7 @@ defmodule Knigge.Module do
   module = inspect(__MODULE__)
 
   def ensure_exists!(module, env) do
-    unless Knigge.Module.exists?(module) do
+    if !Knigge.Module.exists?(module) do
       Knigge.Error.module_not_loaded!(module, env)
     end
 

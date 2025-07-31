@@ -55,7 +55,7 @@ defmodule Knigge.Code do
           Warn.definition_matching_callback(module, callback)
 
         has_default?(defaults, callback) ->
-          unless callback in optional_callbacks do
+          if callback not in optional_callbacks do
             Error.default_for_required_callback!(env)
           end
 
