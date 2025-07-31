@@ -14,13 +14,13 @@ jobs:
   publish_to_hex:
     name: Publish to Hex.pm
     runs-on: ubuntu-latest
-    container: hexpm/elixir:1.11.2-erlang-22.3.4.3-alpine-3.11.6
+    container: hexpm/elixir:1.18.4-erlang-27.3.4.1-alpine-3.22.0
     env:
-      VERSION_ALPINE: 3.11.6
-      VERSION_ELIXIR: 1.11.2
-      VERSION_OTP: 22.3.4.3
+      VERSION_ALPINE: 3.22.0
+      VERSION_ELIXIR: 1.18.4
+      VERSION_OTP: 27.3.4.1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Write the release version to the version file
         run: |
@@ -28,11 +28,14 @@ jobs:
           echo -n "${GITHUB_REF#refs/tags/v}" > version
 
       - name: Cache - deps/
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
-          path: deps/
-          key: ${{ env.CACHE_PREFIX_DEPS }}-env:${{ env.MIX_ENV }}-alpine:${{ env.VERSION_ALPINE }}-elixir:${{ env.VERSION_ELIXIR }}-otp:${{ env.VERSION_OTP }}-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ env.CACHE_PREFIX_DEPS }}-env:${{ env.MIX_ENV }}-alpine:${{ env.VERSION_ALPINE }}-elixir:${{ env.VERSION_ELIXIR }}-otp:${{ env.VERSION_OTP }}-
+          path: |
+            deps
+          key: elixir-deps-${{ runner.os }}-${{ hashFiles('mix.lock') }}-${{ hashFiles('.tool-versions') }}-${{ hashFiles('lib/**/*.ex', 'lib/**/*.*ex', 'config/*.exs', 'mix.exs') }}
+          restore-keys: |
+            elixir-deps-${{ runner.os }}-${{ hashFiles('mix.lock') }}-
+            elixir-deps-${{ runner.os }}
 
       - name: Install Dependencies
         run: |
@@ -41,7 +44,7 @@ jobs:
           mix deps.get --only "$MIX_ENV"
 
       - name: Cache - _build/
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: _build/
           key: ${{ env.CACHE_PREFIX_BUILD }}-env:${{ env.MIX_ENV }}-alpine:${{ env.VERSION_ALPINE }}-elixir:${{ env.VERSION_ELIXIR }}-otp:${{ env.VERSION_OTP }}-${{ hashFiles('**/mix.lock') }}

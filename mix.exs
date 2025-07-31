@@ -1,7 +1,7 @@
 defmodule Knigge.MixProject do
   use Mix.Project
 
-  @repo "https://github.com/alexocode/knigge"
+  @repo "https://github.com/fschoenfeldt/knigge"
 
   def project do
     [
@@ -39,6 +39,7 @@ defmodule Knigge.MixProject do
         "coveralls.detail": :test,
         "coveralls.post": :test,
         "coveralls.html": :test,
+        "coveralls.github": :test,
         check: :test,
         credo: :test,
         dialyzer: :test,
@@ -130,7 +131,10 @@ defmodule Knigge.MixProject do
       links: %{
         "GitHub" => @repo
       },
-      maintainers: ["Alex Wolf <craft@alexocode.dev>"]
+      maintainers: [
+        "Alex Wolf <craft@alexocode.dev>",
+        "Frederik Schönfeldt <frederikschoenfeldt@gmail.com>"
+      ]
     ]
   end
 
