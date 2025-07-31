@@ -27,7 +27,7 @@ defmodule Knigge.VerificationTest do
 
   describe ".run/1" do
     test "returns a context without an error when passing a context with only `FacadeWithImpl`" do
-      raw_context = %Context{app: :knigge, modules: [FacadeWithImpl]}
+      raw_context = %Context{app: :ex_knigge, modules: [FacadeWithImpl]}
       context = Verification.run(raw_context)
 
       assert context.existing == [{FacadeWithImpl, FacadeImpl}]
@@ -36,7 +36,7 @@ defmodule Knigge.VerificationTest do
     end
 
     test "returns a context containing an error when passing a context with `FacadeWithImpl` and `FacadeWithoutImpl`" do
-      raw_context = %Context{app: :knigge, modules: [FacadeWithImpl, FacadeWithoutImpl]}
+      raw_context = %Context{app: :ex_knigge, modules: [FacadeWithImpl, FacadeWithoutImpl]}
       context = Verification.run(raw_context)
 
       assert context.existing == [{FacadeWithImpl, FacadeImpl}]

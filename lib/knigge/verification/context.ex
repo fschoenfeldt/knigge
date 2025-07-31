@@ -62,18 +62,18 @@ defmodule Knigge.Verification.Context do
 
   ## Example
 
-      iex> {:ok, context} = #{module}.for_app(:knigge)
+      iex> {:ok, context} = #{module}.for_app(:ex_knigge)
       iex> context.app
-      :knigge
+      :ex_knigge
       iex> context.modules
       []
 
       iex> context = %#{module}{began_at: 123}
-      iex> {:ok, context} = #{module}.for_app(context, :knigge)
+      iex> {:ok, context} = #{module}.for_app(context, :ex_knigge)
       iex> context.began_at
       123
       iex> context.app
-      :knigge
+      :ex_knigge
       iex> context.modules
       []
 

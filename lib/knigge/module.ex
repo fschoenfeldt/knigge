@@ -41,7 +41,7 @@ defmodule Knigge.Module do
       iex> #{module}.fetch_for_app(:this_does_not_exist)
       {:error, :undefined}
 
-      iex> #{module}.fetch_for_app(:knigge)
+      iex> #{module}.fetch_for_app(:ex_knigge)
       {:ok, []}
   """
   @spec fetch_for_app(app :: atom()) :: {:ok, list(module())} | {:error, :undefined}

@@ -4,19 +4,19 @@ defmodule Behaviour.WithNoParens do
   import Knigge.Test.SaltedModule
 
   test "works fine with a callback without parens" do
-    Application.put_env(:knigge, :working_behaviour, SomeModule)
+    Application.put_env(:ex_knigge, :working_behaviour, SomeModule)
 
     # Should not raise
     behaviour =
       defmodule_salted WorkingBehaviour do
         use Knigge,
-          otp_app: :knigge,
+          otp_app: :ex_knigge,
           config_key: :working_behaviour
 
         @callback fun :: boolean
       end
 
-    Application.delete_env(:knigge, :working_behaviour)
+    Application.delete_env(:ex_knigge, :working_behaviour)
 
     assert behaviour.__knigge__(:implementation) == SomeModule
   end

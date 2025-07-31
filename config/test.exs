@@ -1,4 +1,4 @@
 import Config
 
-config :knigge,
+config :ex_knigge,
   delegate_at_runtime?: false

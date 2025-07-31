@@ -5,7 +5,7 @@ defmodule Knigge.MixProject do
 
   def project do
     [
-      app: :knigge,
+      app: :ex_knigge,
       config_path: "config/config.exs",
       elixir: ">= 1.18.0 and < 2.0.0",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule Knigge.MixProject do
       dialyzer: dialyzer(),
 
       # Docs
-      name: "Knigge",
+      name: "ExKnigge",
       source_url: @repo,
       homepage_url: @repo,
 
