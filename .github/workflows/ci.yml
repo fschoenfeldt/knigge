@@ -1,67 +1,36 @@
-name: CI
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-on:
-  - pull_request
-  - push
+name: check
+
+on: push
+
 jobs:
-  linux:
-    name: Test on Ubuntu (Elixir ${{ matrix.elixir }}, OTP ${{ matrix.otp }})
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        elixir:
-          - "1.18.0"
-          - "1.18.4"
-        otp:
-          - "25.3"
-          - "26.2"
-          - "27.3"
+  mix_check:
+    name: mix check
+    runs-on: ubuntu-20.04
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup Elixir
-        uses: erlef/setup-beam@v1
-        with:
-          elixir-version: ${{ matrix.elixir }}
-          otp-version: ${{ matrix.otp }}
-      - name: Restore deps
+
+      - name: Setup Tools
+        uses: asdf-vm/actions/install@v3
+
+      - name: Cache Elixir Deps/Build
         uses: actions/cache@v3
         with:
-          path: deps
-          key: deps-${{ runner.os }}-${{ matrix.elixir }}-${{ matrix.otp }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-      - name: Restore _build
-        uses: actions/cache@v3
-        with:
-          path: _build
-          key: _build-${{ runner.os }}-${{ matrix.elixir }}-${{ matrix.otp }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-      # - name: Restore .dialyzer
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: .dialyzer
-      #     key: .dialyzer-${{ runner.os }}-${{ matrix.elixir }}-${{ matrix.otp }}-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-      #   if: ${{ contains(matrix.elixir, '1.14.1') && contains(matrix.otp, '25.1') }}
-      - name: Get dependencies
-        run: mix deps.get
-      - name: Compile dependencies
-        run: MIX_ENV=test mix deps.compile
-      - name: Compile project
-        run: MIX_ENV=test mix compile --warnings-as-errors
-      - name: Check unused dependencies
-        if: ${{ contains(matrix.elixir, '1.14.1') && contains(matrix.otp, '25.1') }}
-        run: MIX_ENV=test mix deps.unlock --check-unused
-      - name: Check code format
-        if: ${{ contains(matrix.elixir, '1.14.1') && contains(matrix.otp, '25.1') }}
-        run: MIX_ENV=test mix format --check-formatted
-      - name: Lint code
-        if: ${{ contains(matrix.elixir, '1.14.1') && contains(matrix.otp, '25.1') }}
-        run: MIX_ENV=dev mix credo --strict
-      - name: Run tests
-        run: MIX_ENV=test mix test
-        if: ${{ !(contains(matrix.elixir, '1.14.1') && contains(matrix.otp, '25.1')) }}
-      - name: Run tests with coverage
-        run: MIX_ENV=test mix coveralls.github
-        if: ${{ contains(matrix.elixir, '1.14.1') && contains(matrix.otp, '25.1') }}
-      - name: Static code analysis
-        run: MIX_ENV=test mix dialyzer
-        if: ${{ contains(matrix.elixir, '1.14.1') && contains(matrix.otp, '25.1') }}
+          path: |
+            deps
+            _build
+            assets/node_modules
+          key: elixir-deps-${{ runner.os }}-${{ hashFiles('mix.lock') }}-${{ hashFiles('.tool-versions') }}-${{ hashFiles('assets/pnpm-lock.yaml') }}-${{ hashFiles('lib/**/*.ex', 'lib/**/*.*ex', 'config/*.exs', 'mix.exs') }}
+          restore-keys: |
+            elixir-deps-${{ runner.os }}-${{ hashFiles('mix.lock') }}-
+            elixir-deps-${{ runner.os }}
+
+      - name: Run setup
+        run: mix setup
+
+      - name: Run check
+        run: mix check --except dialyzer
+
+      - name: Run dialyzer
+        run: mix dialyzer
