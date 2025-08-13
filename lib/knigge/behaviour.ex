@@ -8,9 +8,8 @@ defmodule Knigge.Behaviour do
   It works whether the module is already compiled or still open, for which it
   uses `Module.open?/1`. If the module is still open it directly accesses the
   module attribute `:callback` by calling `Module.get_attribute/2` and then
-  using `Knigge.AST.function_spec_from_callback/1` to transform the AST into a
-  function spec, such as `{:my_function, 2}` which is being returned as a
-  Keyword list.
+  transforms the AST into a function spec, such as `{:my_function, 2}` which
+  is being returned as a Keyword list.
   """
 
   alias Knigge.Options
