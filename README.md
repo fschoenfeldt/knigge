@@ -1,12 +1,6 @@
 # Knigge
 
-[![CI](https://github.com/alexocode/knigge/workflows/CI/badge.svg)](https://github.com/alexocode/knigge/actions?query=branch%3Amain+workflow%3ACI)
-[![Coverage Status](https://coveralls.io/repos/github/alexocode/knigge/badge.svg?branch=main)](https://coveralls.io/github/alexocode/knigge?branch=main)
-[![Hexdocs.pm](https://img.shields.io/badge/hexdocs-online-blue)](https://hexdocs.pm/knigge/)
-[![Hex.pm](https://img.shields.io/hexpm/v/knigge.svg)](https://hex.pm/packages/knigge)
-[![Hex.pm Downloads](https://img.shields.io/hexpm/dt/knigge)](https://hex.pm/packages/knigge)
-[![Featured - ElixirRadar](https://img.shields.io/badge/featured-ElixirRadar-543A56)](https://app.rdstation.com.br/mail/0ddee1c8-2ce9-405b-b95f-09c883099090?utm_campaign=elixir_radar_202&utm_medium=email&utm_source=RD+Station)
-[![Featured - ElixirWeekly](https://img.shields.io/badge/featured-ElixirWeekly-875DB0)](https://elixirweekly.net/issues/161)
+Forked from https://github.com/alexocode/knigge.
 
 An opinionated way of dealing with behaviours.
 
@@ -17,7 +11,7 @@ is either given directly to `Knigge` or fetched from the configuration.
 `Knigge` can be `use`d directly in a behaviour, or in a separate module by
 passing the behaviour which should be "facaded" as an option.
 
-[See the documentation](https://hexdocs.pm/knigge) for more information.
+[See the documentation](https://hexdocs.pm/ex_knigge) for more information.
 
 ## Table of Contents
 
@@ -44,7 +38,7 @@ Simply add `knigge` to your list of dependencies in your `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_knigge, "~> 1.4"}
+    {:ex_knigge, "2.0.0-rc.0"}
   ]
 end
 ```
@@ -241,12 +235,12 @@ since the implementing module will have to be loaded for each call.
 If you want to do delegation at runtime simply pass `delegate_at_runtime?: true`
 as option - by default `Knigge` delegates at runtime in your `:test`s.
 
-For further information about options check the [`Knigge.Options` module](https://hexdocs.pm/knigge/Knigge.Options.html).
+For further information about options check the [`Knigge.Options` module](https://hexdocs.pm/ex_knigge/Knigge.Options.html).
 
 ## Verifying your implementations - `mix knigge.verify`
 
 Before version 1.2.0 `Knigge` tried to check at compile time if the implementation of your facade existed.
-Due to the way the Elixir compiler goes about compiling your modules this didn't work as expected - [checkout this page if you're interested in the details](https://hexdocs.pm/knigge/the-existence-check.html).
+Due to the way the Elixir compiler goes about compiling your modules this didn't work as expected - [checkout this page if you're interested in the details](https://hexdocs.pm/ex_knigge/the-existence-check.html).
 
 As an alternative `Knigge` now offers the `mix knigge.verify` task which verifies that the implementation modules of your facades actually exist.
 The task returns with an error code when an implementation is missing, which allows you to plug it into your CI pipeline - for example as `MIX_ENV=prod mix knigge.verify`.
